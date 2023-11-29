@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up </title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="main">
+
+        <section class="signup">
+
+            <div class="container">
+                <div class="signup-content">
+
+                    <h2 class="form-title">Create account</h2>
+                    <div class="form-group">
+                        <input type="text" class="form-input" name="name" id="nameofuser" placeholder="Your Name" />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" name="email" id="email" placeholder="Your Email" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="username" placeholder="User Id" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" name="password" id="password" placeholder="Password" />
+                        <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="submit" onclick="registerUser()" class="form-submit" value="Sign up" />
+                    </div>
+
+                    <div id="message"></div>
+                    <div id="messageforalreadyuser" style="color: red;font-weight: bold;"></div>
+                    <p class="loginhere">
+                        Have already an account ? <a href="../login/index.html" class="loginhere-link">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="../js/register.js"></script>
+
+</body>
+
+</html>

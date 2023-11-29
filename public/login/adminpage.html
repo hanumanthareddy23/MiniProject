@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager Admin Page</title>
+  <link rel="stylesheet" href="damin.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    /* Import Bootstrap */
+    @import url('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
+
+    /* Your existing styles here */
+
+    /* Create Task Form Popup Styles */
+    #createTaskForm {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #d6d6d6;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      width: 80%;
+      /* Adjust the width as needed */
+      max-width: 600px;
+      /* Maximum width for larger screens */
+    }
+
+    #createTaskForm label {
+      font-weight: bold;
+    }
+
+    #createTaskForm input[type="text"],
+    #createTaskForm input[type="date"],
+    #createTaskForm select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    #createTaskForm select {
+      appearance: none;
+      /* Remove default arrow in Firefox */
+    }
+
+    #createTaskForm button[type="button"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    #createTaskForm button[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    #createTaskForm button[type="submit"] {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    #createTaskForm button[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    /* Add more custom styles as needed */
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+  <!-- Navigation bar -->
+  <nav>
+    <a id="Alltask" style="font-weight: bold;">All Tasks</a>
+    <a id="completedTask" style="font-weight: bold;">Completed Tasks</a>
+    <a id="declinedTask" style="font-weight: bold;">Declined Tasks</a>
+    <input type="text" id="searchInput" style="width: 23%;" placeholder="Search...">
+    <button type="button" class="btn btn-success" id="searchButton">Search</button>
+    <!-- <button id="filter" class="btn btn-success">filter</button> -->
+
+
+    <select class="form-control form-control-sm custom-width" id="sortField"
+      style="position: absolute;top: 20px;right: 450px;">
+      <option value="TITLE">Title</option>
+      <option value="DEADLINE">Deadline</option>
+      <option value="DESCRIPTION">Description</option>
+      <option value="ASSIGNED_TO">Assigned to</option>
+      <option value="STATUS">Status</option>
+      <!-- Add more options as needed -->
+    </select>
+
+    <!-- Sort Order Select -->
+
+    <select class="form-control form-control-sm custom-width" id="sortOrder"
+      style="position: absolute;top: 20px;right: 320px;">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+
+
+    <!-- Sort Button -->
+    <button class="btn btn-success" id="sortButton" style="position: absolute;top: 20px;right: 220px;">
+      Sort Tasks
+    </button>
+
+
+    <!-- Additional styling for demonstration -->
+    <style>
+      .custom-width {
+        width: 120px;
+      }
+    </style>
+    <button id="logoutBtn" class="btn btn-light" style="position: relative;left: 450px;">Logout</button>
+  </nav>
+  <br>
+  <button id="addTask" style="font-weight: bold;" class="btn btn-success">Add Task</button>
+
+  <!-- Task table -->
+  <table id="taskTable">
+    <!-- Table headers -->
+    <tr>
+      <th>TASK_ID</th>
+      <th onclick="sortTasks('Task_Title')">Task Title</th>
+      <th onclick="sortTasks('TASK_DESCRIPTION')">Task Description</th>
+      <th>Initiation Date</th>
+      <th onclick="sortTasks('DEADLINE')">Due Date</th>
+      <th>Priority Level</th>
+      <th>Assigned to</th>
+      <th>Status</th>
+      <th>Actions</th>
+
+    </tr>
+    <!-- Table data will be added dynamically using JavaScript -->
+  </table>
+
+  <!-- Create Task Form Popup -->
+  <div id="createTaskForm">
+    <form id="taskForm">
+
+      <label for="TITLE">Task Title:</label>
+      <input type="text" id="TITLE" name="TITLE" required>
+
+      <label for="DESCRIPTION">Task Description:</label>
+      <input type="text" id="DESCRIPTION" name="DESCRIPTION" required>
+
+      <label for="DEADLINE">Deadline:</label>
+      <input type="date" id="DEADLINE" name="DEADLINE" required>
+
+      <label for="PRIORITY">Priority Level:</label>
+      <select id="PRIORITY" name="PRIORITY" required>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <label for="ASSIGNED_TO">Assigned to:</label>
+      <div id="ASSIGNED_TO">
+      </div>
+      <button type="button" id="createTaskFormSubmit">Submit</button>
+      <button type="button" id="createTaskFormCancel">Cancel</button>
+    </form>
+  </div>
+
+  <!-- New Edit Task Form Popup -->
+  <div id="editTaskForm" class="add-form" style="display: none;">
+    <h2 class="text-primary">Edit Task Details</h2>
+
+    <input type="hidden" id="editTaskId">
+
+    <input type="text" id="editTaskTitle" placeholder="Task Title" required>
+    <input type="text" id="editDESCRIPTION" placeholder="Task Description" required>
+    <input type="date" id="editTaskDueDate" placeholder="Due Date" required>
+    <select id="editTaskPriority" required>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+    <input type="text" id="editTaskAssignedTo" placeholder="Assigned To" required>
+    <input type="text" id="editTaskCOMMENT" placeholder="COMMENT" required>
+
+    <button id="update1" onclick="updateTask()">Update</button>
+    <button id="cancel1">Cancel</button>
+
+  </div>
+
+
+  <script src="adminDashboard.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
